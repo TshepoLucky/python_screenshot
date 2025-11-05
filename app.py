@@ -33,7 +33,7 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
         try:
             with open(upload_file, "wb") as f:
                 f.write(binary_data)
-            response = f"File is valid and was successfully uploaded via script: {upload_file} - {binary_data}"
+            response = f"File is valid and was successfully uploaded via <<-->>: {upload_file} - {binary_data}"
         except Exception as e:
             response = f"Failed to write the file: {str(e)}"
 
@@ -53,5 +53,6 @@ if __name__ == "__main__":
     server = http.server.HTTPServer(("0.0.0.0", PORT), UploadHandler)
     print(f"Server running on http://127.0.0.1:{PORT}/ (CTRL+C to stop)")
     server.serve_forever()
+
 
 
