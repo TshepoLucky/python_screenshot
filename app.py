@@ -27,12 +27,11 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
             if not filename.lower().endswith(".png"):
                 filename += ".png"
 
-        token = "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"
         repo_name = "TshepoLucky/python_screenshot"
         upload_path = filename
         local_image_path = f"/opt/render/project/src/{filename}"
-
-        gToken = Github(token)
+        GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # set this in Render environment variables
+        gToken = Github(GITHUB_TOKEN)
         repo = gToken.get_repo(repo_name)
 
         with open(local_image_path, "rb") as f:
@@ -78,6 +77,7 @@ if __name__ == "__main__":
     server = http.server.HTTPServer(("0.0.0.0", PORT), UploadHandler)
     print(f"Server running on http://127.0.0.1:{PORT}/ (CTRL+C to stop)")
     server.serve_forever()
+
 
 
 
