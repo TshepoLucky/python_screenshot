@@ -27,10 +27,15 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
             if not filename.lower().endswith(".png"):
                 filename += ".png"
 
+        # Save file in same directory as the script
+        upload_dir = os.getcwd()
+        upload_file = os.path.join(upload_dir, filename)
+
         repo_name = "TshepoLucky/python_screenshot"
         upload_path = filename
-        local_image_path = f"/opt/render/project/src/{filename}"
+        local_image_path = upload_file
         GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # set this in Render environment variables
+
         gToken = Github(GITHUB_TOKEN)
         repo = gToken.get_repo(repo_name)
 
@@ -49,7 +54,7 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
             response = "Image added successfully!"
         except Exception as e:
             response = f"Failed to add the file: {str(e)}"
-            
+
         # Save file in same directory as the script
         upload_dir = os.getcwd()
         upload_file = os.path.join(upload_dir, filename)
@@ -77,7 +82,3 @@ if __name__ == "__main__":
     server = http.server.HTTPServer(("0.0.0.0", PORT), UploadHandler)
     print(f"Server running on http://127.0.0.1:{PORT}/ (CTRL+C to stop)")
     server.serve_forever()
-
-
-
-
