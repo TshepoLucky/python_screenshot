@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from github import Github
 import http.server
 import os
 import re
@@ -31,38 +30,10 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
         upload_dir = os.getcwd()
         upload_file = os.path.join(upload_dir, filename)
 
-        repo_name = "TshepoLucky/python_screenshot"
-        upload_path = filename
-        local_image_path = upload_file
-        GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # set this in Render environment variables
-
-        gToken = Github(GITHUB_TOKEN)
-        repo = gToken.get_repo(repo_name)
-
-        with open(local_image_path, "rb") as f:
-            content = f.read()
-
-        try:
-            file = repo.get_contents(upload_path)
-            repo.update_file(upload_path, "Update image", content, file.sha)
-            response = "Image updated successfully!"
-        except Exception as e:
-            response = f"Failed to update the file: {str(e)}"
-        
-        try:
-            repo.create_file(upload_path, "Add image", content)
-            response = "Image added successfully!"
-        except Exception as e:
-            response = f"Failed to add the file: {str(e)}"
-
-        # Save file in same directory as the script
-        upload_dir = os.getcwd()
-        upload_file = os.path.join(upload_dir, filename)
-
         try:
             with open(upload_file, "wb") as f:
                 f.write(binary_data)
-            response = f"File is valid and was successfully uploaded: {upload_file}"
+            response = f"File is valid and was successfully uploaded via script: {upload_file}"
         except Exception as e:
             response = f"Failed to write the file: {str(e)}"
 
@@ -82,3 +53,5 @@ if __name__ == "__main__":
     server = http.server.HTTPServer(("0.0.0.0", PORT), UploadHandler)
     print(f"Server running on http://127.0.0.1:{PORT}/ (CTRL+C to stop)")
     server.serve_forever()
+
+
