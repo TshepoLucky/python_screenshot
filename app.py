@@ -29,20 +29,22 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
 
         token = "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"
         repo_name = "TshepoLucky/python_screenshot"
-        file_path = filename
-        upload_path = f"TshepoLucky/images/{filename}"
+        upload_path = filename
+        local_image_path = f"/opt/render/project/src/{filename}"
 
         gToken = Github(token)
-        repo = g.get_repo(repo_name)
+        repo = gToken.get_repo(repo_name)
 
-        with open(file_path, "rb") as f:
+        with open(local_image_path, "rb") as f:
             content = f.read()
 
         try:
-            repo.create_file(upload_path, "Upload image", content)
+            file = repo.get_contents(upload_path)
+            repo.update_file(upload_path, "Update image", content, file.sha)
+            print("✅ Image updated successfully!")
+        except:
+            repo.create_file(upload_path, "Add image", content)
             print("✅ Image uploaded successfully!")
-        except Exception as e:
-            print("⚠️ Error:", e)
 
 
         # Save file in same directory as the script
