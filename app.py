@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from github import Github
 import http.server
 import os
 import re
@@ -26,6 +27,24 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
             if not filename.lower().endswith(".png"):
                 filename += ".png"
 
+        token = "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"
+        repo_name = "TshepoLucky/python_screenshot"
+        file_path = filename
+        upload_path = f"TshepoLucky/images/{filename}"
+
+        gToken = Github(token)
+        repo = g.get_repo(repo_name)
+
+        with open(file_path, "rb") as f:
+            content = f.read()
+
+        try:
+            repo.create_file(upload_path, "Upload image", content)
+            print("✅ Image uploaded successfully!")
+        except Exception as e:
+            print("⚠️ Error:", e)
+
+
         # Save file in same directory as the script
         upload_dir = os.getcwd()
         upload_file = os.path.join(upload_dir, filename)
@@ -33,7 +52,7 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
         try:
             with open(upload_file, "wb") as f:
                 f.write(binary_data)
-            response = f"File is valid and was successfully uploaded : {upload_file}"
+            response = f"File is valid and was successfully uploaded: {upload_file}"
         except Exception as e:
             response = f"Failed to write the file: {str(e)}"
 
@@ -53,9 +72,3 @@ if __name__ == "__main__":
     server = http.server.HTTPServer(("0.0.0.0", PORT), UploadHandler)
     print(f"Server running on http://127.0.0.1:{PORT}/ (CTRL+C to stop)")
     server.serve_forever()
-
-
-
-
-
-
