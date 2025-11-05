@@ -28,7 +28,7 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
 
         # Save file in same directory as the script
         upload_dir = os.getcwd()
-        upload_file = os.path.join("C:/Users/hlaab/Documents/AIEA/GPT-4o_Expert_Advisor_MT5-main/Python_Code/images/", filename)
+        upload_file = os.path.join(upload_dir, filename)
 
         try:
             with open(upload_file, "wb") as f:
@@ -53,6 +53,7 @@ if __name__ == "__main__":
     server = http.server.HTTPServer(("0.0.0.0", PORT), UploadHandler)
     print(f"Server running on http://127.0.0.1:{PORT}/ (CTRL+C to stop)")
     server.serve_forever()
+
 
 
 
