@@ -41,10 +41,10 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
         try:
             file = repo.get_contents(upload_path)
             repo.update_file(upload_path, "Update image", content, file.sha)
-            print("✅ Image updated successfully!")
+            response = "Image updated successfully!"
         except:
             repo.create_file(upload_path, "Add image", content)
-            print("✅ Image uploaded successfully!")
+            response = "Image Create uploaded successfully!"
 
 
         # Save file in same directory as the script
@@ -74,4 +74,5 @@ if __name__ == "__main__":
     server = http.server.HTTPServer(("0.0.0.0", PORT), UploadHandler)
     print(f"Server running on http://127.0.0.1:{PORT}/ (CTRL+C to stop)")
     server.serve_forever()
+
 
