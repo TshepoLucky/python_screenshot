@@ -33,7 +33,7 @@ class UploadHandler(http.server.BaseHTTPRequestHandler):
         try:
             with open(upload_file, "wb") as f:
                 f.write(binary_data)
-            response = f"File is valid and was successfully uploaded via script: {upload_file}"
+            response = f"File is valid and was successfully uploaded via script: {upload_file} - {binary_data}"
         except Exception as e:
             response = f"Failed to write the file: {str(e)}"
 
